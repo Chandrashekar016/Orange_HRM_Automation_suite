@@ -2,6 +2,7 @@
   "name": "playwright_test_automation_suite",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {},
   "keywords": [],
   "author": "",
@@ -12,6 +13,7 @@
     "@types/node": "^25.9.3"
   },
   "dependencies": {
+    "@faker-js/faker": "^8.4.1",
     "dotenv": "^17.4.2"
   }
 }
