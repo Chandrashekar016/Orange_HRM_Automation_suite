@@ -1,0 +1,13 @@
+
+function checkifCountryExists(arr: string [],userinput: string)
+{
+	const countriesList: string[] = 	page.locator("#country>options").allInnerTexts();	
+	for(let char of countriesList)
+}    
+
+
+	if(char.includes(userinput))
+        {
+        console.log(char)
+        break;
+        }

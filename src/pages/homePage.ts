@@ -30,7 +30,7 @@ async navigateToHomepage()
 {
      await this.page.goto('/');  // since we added the baseURL in the playwright.config.ts file, we can use relative URL here.
      // if we wanted goto register page just give "/register" to navigate to register page.
-     await expect(this.welcomeLogo).toBeVisible();
+     await expect(this.welcomeLogo).toBeVisible({timeout: 3000});
 }
 
 async PerformLogin(username: string, password: string)
