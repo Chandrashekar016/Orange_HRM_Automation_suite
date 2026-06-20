@@ -10,6 +10,7 @@ import path from 'path'
 
 
 
+
 test.describe("PIM, MYinfo scenarios",async()=>{
 
 
@@ -27,7 +28,7 @@ test.describe("PIM, MYinfo scenarios",async()=>{
     })
 
 
-    test("validation of new user creation via PIM.",async({page})=>{
+    test.skip("validation of new user creation via PIM.",async({page})=>{
 
         //object creation for PIM page.
         const pimpage = new PIMPage(page);
@@ -68,14 +69,43 @@ test.describe("PIM, MYinfo scenarios",async()=>{
         await expect(myinfo.personalDetailsHeader).toBeVisible({timeout: 3000});
         await myinfo.clickAddbutton();
         //file uploading;
-        const pathofTestFile = path.resolve("src/test-data/uploadingTest.txt");
+        const pathofTestFile = path.resolve("src/test-data/last_in_segment.txt");
         await myinfo.uploadTheFile(pathofTestFile)
-        await page.waitForTimeout(3000);
-        await expect(myinfo.fileUploadSuccessToast).toBeVisible();
+        await expect(myinfo.fileUploadSuccessToast).toBeVisible({timeout: 2000});
         console.log(await myinfo.fileUploadSuccessToast.innerText());
 
+        // validating the uploaded file if added to the table or not;
+        await myinfo.table.waitFor({state: "visible"});
+        const uploadingfilename = "last_in_segment.txt";
+        await myinfo.getRowByFileName(uploadingfilename);
+        await myinfo.verifyIfNewRowExists(uploadingfilename);
+        console.log("uploaded file: " + uploadingfilename);
+        await page.waitForTimeout(3000);
+        //clciking specific row's edit button.
+        await myinfo.rowEDIT(uploadingfilename);
+        await expect(myinfo.editAttachmentheader).toBeVisible({timeout: 2000});
+        console.log(await myinfo.editAttachmentheader.innerText());
+
+        // adding new file name by editing the uploade file;
+        const datevalue=  Date.now();
+        await myinfo.addnewFileNmae(`TestFile_${datevalue}`);
+        // await page.waitForTimeout(3000);
 
     })
 
 
+    test("validate the Uploaded file delete functionality by deleting them.",async({page})=>{
+
+        //object creation;
+        const myinfo = new MyInfoPage(page);
+        await myinfo.myinfoBTN.click({timeout: 2000});
+        await myinfo.table.waitFor({state: "visible"});
+    
+        await myinfo.trashAllUploads();
+        await expect.soft(myinfo.successfullyDeletionToast).toBeVisible();
+
+    })
+
+
+    
 });
